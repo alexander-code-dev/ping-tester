@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Ping tester</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+        }
+
+        input:read-only {
+            background: lightgray;
+        }
+
+        .row {
+            margin-top: 10px;
+        }
+
+        h3 {
+            background-repeat: no-repeat;
+            padding: 2px;
+            padding-left: 30px;
+        }
+
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        li {
+            float: left;
+        }
+
+        a {
+            display: block;
+            padding: 8px;
+            background-color: #dddddd;
+        }
+        .table th {
+            font-weight: bold;
+            padding: 5px;
+            background: #efefef;
+            border: 1px solid #dddddd;
+        }
+        .table td {
+            border: 1px solid #dddddd;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+<!--Проверка хоста-->
+<div>
+    <form id="add-form" action="makeCheck.html" th:action="@{/ping}" th:method="post" th:object="${pingRequestDto}">
+        <h3>Проверить доступность</h3>
+        <div class="row">
+            <label for="ip-host-input">IP/HOST:</label>
+            <input id="ip-host-input" name="host" type="text" th:value="*{host}" value="host" required="true"/>
+        </div>
+        <div class="row">
+            <button type="submit">Запустить проверку</button>
+        </div>
+    </form>
+</div>
+<!--Поиск по домену или ip-->
+<div>
+    <form id="form-for-search-by-host" action="makeCheck.html" th:action="@{/searchCheck}" th:method="get" th:object="${pingRequestDto}">
+        <h3>Поиск среди выполненных проверок IP/HOST</h3>
+        <div class="row">
+            <label for="ip-host-input-for-search">IP/HOST:</label>
+            <input id="ip-host-input-for-search" name="host" type="text" th:value="*{host}" value="host"/>
+        </div>
+
+        <div class="row">
+            <button type="submit">Выполнить проверку</button>
+        </div>
+    </form>
+    <!--Поиск по дате-->
+    <form id="form-for-search-by-date" action="makeCheck.html" th:action="@{/searchCheck}" th:method="get" th:object="${pingRequestDto}">
+        <h3>Поиск среди выполненных проверок по датам</h3>
+        <div class="row">
+            <label for="ip-host-input-for-search">Дата начала:</label>
+            <input type="datetime-local" name="startDate" th:value="*{startDate}" id="start-date" required="true"/>
+            </br></br>
+            <label for="ip-host-input-for-search">Дата окончания:</label>
+            <input type="datetime-local" name="endDate" th:value="*{endDate}" id="end-date" required="true"/>
+        </div>
+
+        <div class="row">
+            <button type="submit">Выполнить проверку</button>
+        </div>
+    </form>
+</div>
+<br/>
+<div>
+    <!--Табличка статистики-->
+    <h3>Статистика запросов</h3>
+    <table border="1">
+        <thead>
+        <tr>
+            <th>IP | HOST</th>
+            <th>CHECK STATUS</th>
+            <th>DETAILS</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="pingResponseDto : ${pingResponseDtos.content}">
+            <td th:text="${pingResponseDto.host}" />
+            <td th:text="${pingResponseDto.status}" />
+            <td>
+                <a th:href="@{/details/(id=${pingResponseDto.id})}" href="details.html">Details</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <!--Горизонтальная навигация-->
+    <div>
+        <h3>Навигация</h3>
+        <div th:if="${pingResponseDtos.totalPages > 0}" class="pagination"
+             th:each="pageNumber : ${pageNumbers}">
+            <ul>
+                <li>
+                    <a th:href="@{/(size=${pingResponseDtos.size}, page=${pageNumber})}"
+                       th:text=${pageNumber}
+                       th:class="${pageNumber==pingResponseDtos.number + 1} ? active"></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+</html>

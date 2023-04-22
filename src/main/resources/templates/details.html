@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Statistics</title>
+    <style type="text/css">
+        .table {
+            width: 100%;
+            margin-bottom: 20px;
+            border: 1px solid #dddddd;
+            border-collapse: collapse;
+        }
+        .table th {
+            font-weight: bold;
+            padding: 5px;
+            background: #efefef;
+            border: 1px solid #dddddd;
+        }
+        .table td {
+            border: 1px solid #dddddd;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <!--Подробная статистика по проверке-->
+    <h3>Подробная статистика по проверке</h3>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>IP | HOST</th>
+            <th>EXECUTE_DATE</th>
+            <th>STATUS</th>
+            <th>STATISTICS</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td th:text="${pingResponseDtos.host}" />
+            <td th:text="${pingResponseDtos.executeDate}" />
+            <td th:text="${pingResponseDtos.status}" />
+            <td th:text="${pingResponseDtos.detailMsg}" />
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="row">
+    <a href="makeCheck.html" th:href="@{/}"><button type="button">Назад</button></a>
+</div>
+
+</body>
+</html>

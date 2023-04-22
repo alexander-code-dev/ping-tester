@@ -1,0 +1,19 @@
+spring:
+  jpa:
+    generate-ddl: false
+  datasource:
+    driver-class-name: org.postgresql.Driver
+  main:
+    banner-mode: off
+    allow-circular-references: true
+  flyway:
+    locations:
+      - classpath:/db/migration/1.0
+    enabled: true
+    driver-class-name: org.postgresql.Driver
+  h2:
+    console:
+      enabled: false
+      path: /h2-console
+      settings:
+        web-allow-others: true
