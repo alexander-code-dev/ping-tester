@@ -2,7 +2,7 @@ CREATE TABLE TEST_RESULT (
     id bigint not null primary key,
     host varchar,
     execute_date timestamp,
-    status bigint,
+    status varchar,
     result varchar
 );
 CREATE SEQUENCE TEST_RESULT_ID_SEQ;
