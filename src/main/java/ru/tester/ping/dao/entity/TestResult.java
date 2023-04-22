@@ -23,7 +23,8 @@ public class TestResult {
 
     String host;
     LocalDateTime executeDate;
-    Integer status;
+    String status;
+    @Column(name = "result")
     String detailMsg;
 
     @Override
