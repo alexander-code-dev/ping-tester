@@ -3,9 +3,11 @@ package ru.tester.ping.sevice.impl;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.tester.ping.dao.entity.TestResult;
 import ru.tester.ping.sevice.CmdExecutorService;
-import ru.tester.ping.sevice.TestResultRepositoryService;
+import ru.tester.ping.sevice.TestResultService;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,12 +15,18 @@ import java.io.InputStream;
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
-public class CmdExecutorServiceServiceImpl implements CmdExecutorService {
+@Slf4j
+public class CmdExecutorServiceImpl implements CmdExecutorService {
 
-    TestResultRepositoryService testResultRepositoryService;
+    TestResultService testResultService;
 
-    public void pingExecutor(String host) {
-        String pingCmd = "ping " + host + " -c 1";
+    /**
+     * Выполнение запроса по host | ip
+     * @param host - host | ip
+     * @return - результат проверки
+     */
+    public TestResult pingExecutor(String host) {
+        String pingCmd = "ping " + host + " -c 1 -W 1";
 
         try {
             String inputLine;
@@ -33,12 +41,11 @@ public class CmdExecutorServiceServiceImpl implements CmdExecutorService {
                     inputLine = new String(errorStream.readAllBytes());
                 }
             }
+            return testResultService.save(host, inputLine);
 
-            testResultRepositoryService.save(host, inputLine);
-
-            System.out.println(inputLine);
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            log.error("Произошла ошибка в выполнении команды ping.", e);
+            return null;
         }
     }
 }
