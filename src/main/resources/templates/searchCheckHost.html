@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Search results</title>
+    <style>
+        .row {
+            margin-top: 10px;
+        }
+        .table {
+            width: 100%;
+            margin-bottom: 20px;
+            border: 1px solid #dddddd;
+            border-collapse: collapse;
+        }
+        .table th {
+            font-weight: bold;
+            padding: 5px;
+            background: #efefef;
+            border: 1px solid #dddddd;
+        }
+        .table td {
+            border: 1px solid #dddddd;
+            padding: 5px;
+        }
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        li {
+            float: left;
+        }
+        li a {
+            display: block;
+            padding: 8px;
+            background-color: #dddddd;
+        }
+
+    </style>
+</head>
+<body>
+<div>
+    <!--Табличка статистики-->
+    <h3>Статистика запросов</h3>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>IP | HOST</th>
+            <th>EXECUTE_DATE</th>
+            <th>STATUS</th>
+            <th>STATISTICS</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="pingResponseDto : ${pingResponseDtos.content}">
+            <td th:text="${pingResponseDto.host}" />
+            <td th:text="${pingResponseDto.executeDate}" />
+            <td th:text="${pingResponseDto.status}" />
+            <td th:text="${pingResponseDto.detailMsg}" />
+        </tr>
+        </tbody>
+    </table>
+    <!--Горизонтальная навигация-->
+    <div>
+        <h3>Навигация</h3>
+        <div th:if="${pingResponseDtos.totalPages > 0}" class="pagination"
+             th:each="pageNumber : ${pageNumbers}">
+            <ul>
+                <li>
+                    <a th:href="@{/searchCheck/(host=${pingResponseDtos.content[0].hostStrForSearch},size=${pingResponseDtos.size}, page=${pageNumber})}"
+                       th:text=${pageNumber}
+                       th:class="${pageNumber==pingResponseDtos.number + 1} ? active"></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <br/>
+    <br/>
+</div>
+<div class="row">
+    <a href="makeCheck.html" th:href="@{/}"><button type="button">Назад</button></a>
+</div>
+</body>
+</html>
