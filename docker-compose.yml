@@ -1,0 +1,23 @@
+version: '3'
+services:
+  postgresqldb:
+    image: postgres:14
+    environment:
+      - POSTGRES_USER=usr
+      - POSTGRES_PASSWORD=pwd
+      - POSTGRES_DB=testerDb
+    ports:
+      - 5432:5432
+    container_name: postgres14
+  api:
+    build: ./
+    container_name: java17
+    ports:
+      - 8000:8080
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresqldb:5432/testerDb
+      - SPRING_DATASOURCE_USERNAME=usr
+      - SPRING_DATASOURCE_PASSWORD=pwd
+    depends_on:
+      postgresqldb:
+        condition: service_healthy
