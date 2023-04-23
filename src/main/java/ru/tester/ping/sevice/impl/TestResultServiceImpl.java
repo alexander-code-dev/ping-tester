@@ -15,6 +15,7 @@ import ru.tester.ping.sevice.TestResultService;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -25,6 +26,8 @@ public class TestResultServiceImpl implements TestResultService {
     TestResultRepository testResultRepository;
     static String SLICE_STR1 = "100.0% packet loss";
     static String SLICE_STR2 = "Unknown host";
+    static String SLICE_STR3 = "100% packet loss";
+    static String SLICE_STR4 = "bad address";
 
     /**
      * Запрос по id
@@ -95,12 +98,24 @@ public class TestResultServiceImpl implements TestResultService {
      */
     @Override
     public String getStatus(String fullStr) {
-        if (fullStr.contains(SLICE_STR1) || fullStr.contains(SLICE_STR2)) {
-            log.debug("ERROR");
+
+        if (fullStr.contains(SLICE_STR1)) {
             return "ERROR";
-        } else {
-            log.debug("SUCCESS");
-            return "SUCCESS";
         }
+
+        if (fullStr.contains(SLICE_STR2)) {
+            return "ERROR";
+        }
+
+        if (fullStr.contains(SLICE_STR3)) {
+            return "ERROR";
+        }
+
+        if (fullStr.contains(SLICE_STR4)) {
+            return "ERROR";
+        }
+
+        log.debug("SUCCESS");
+        return "SUCCESS";
     }
 }
