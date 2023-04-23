@@ -6,7 +6,7 @@
 
     <groupId>ru.tester.ping</groupId>
     <artifactId>ping-tester</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 
     <properties>
         <maven.compiler.target>17</maven.compiler.target>
@@ -79,7 +79,7 @@
     </dependencies>
 
     <build>
-        <finalName>${artifactId}-${version}</finalName>
+        <finalName>${project.artifactId}-${project.version}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
